@@ -1,6 +1,6 @@
 # clap-test-host
 
-This project is based on the [clack-host-cpal example](https://github.com/prokopyl/clack/tree/main/host/examples/cpal).
+This project is a fork of the [clack-host-cpal example](https://github.com/prokopyl/clack/tree/main/host/examples/cpal) with some modifications.
 
 In addition to the original example, a specific MIDI input port can be passed as argument.
 
@@ -8,7 +8,7 @@ This small(-ish) host will load and instantiate a given plugin, show its UI in a
 feed it with MIDI input and output it to the system's default device using
 [CPAL](https://github.com/RustAudio/cpal).
 
-### Limitations
+## Limitations
 
 Due to CPAL not being able to open a stream in duplex-mode (handling both input and
 output at the same time), this host only connects to one single audio output and doesn't
@@ -64,7 +64,7 @@ Options:
           parameter to specify which file to load the plugin from.
   
   -m, --midi-port <PORT_NO>
-          Opens the MIDI input with the given port number instead of the last one.
+          Opens the MIDI input with the given port number instead of the last found.
 
   -h, --help
           Print help (see a summary with '-h')
