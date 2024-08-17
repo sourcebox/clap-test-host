@@ -2,7 +2,7 @@
 
 This project is based on the [clack-host-cpal example](https://github.com/prokopyl/clack/tree/main/host/examples/cpal).
 
-In addition to the original example, the used MIDI input port can be provided as argument.
+In addition to the original example, a specific MIDI input port can be passed as argument.
 
 This small(-ish) host will load and instantiate a given plugin, show its UI in a window,
 feed it with MIDI input and output it to the system's default device using
@@ -27,7 +27,7 @@ This is just an example host, don't expect too much in terms of features. :)
   can be provided.
 * **Cross-platform**: Can work on Windows, macOS and Linux, including opening GUIs, reading MIDI
   and outputting audio.
-* **GUI suppport**: Can open GUIs using each OS's default GUI API, either in floating or embedded
+* **GUI support**: Can open GUIs using each OS's default GUI API, either in floating or embedded
   window modes, depending on what the plugin supports.
 * **MIDI input support**: Can read MIDI events from an input device, and forward them to the plugin.
 * **Mono or Stereo output**, based on the plugin's preferences: will query the plugin's audio port
