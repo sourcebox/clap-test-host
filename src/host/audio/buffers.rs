@@ -27,7 +27,7 @@ pub struct HostAudioBuffers {
     /// The mixed or muxed output data, ready to be sent to CPAL's interleaved buffer.
     muxed: Vec<f32>,
 
-    /// The actual size of the channel buffers. This may differ from the initial configuraiton, as
+    /// The actual size of the channel buffers. This may differ from the initial configuration, as
     /// CPAL can still request any buffer size.
     actual_frame_count: usize,
 }
