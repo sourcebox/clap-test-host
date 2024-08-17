@@ -25,6 +25,7 @@ struct Cli {
     /// `--plugin-id` (`-p`) parameter to specify which one to load.
     #[arg(short = 'b', long = "bundle-path")]
     bundle_path: Option<PathBuf>,
+
     /// Loads the CLAP plugin with the given unique ID.
     ///
     /// This will start to scan the filesystem in the standard CLAP paths, and load all CLAP bundles
@@ -35,6 +36,10 @@ struct Cli {
     /// plugin from.
     #[arg(short = 'p', long = "plugin-id")]
     plugin_id: Option<String>,
+
+    /// Opens the MIDI input with the given port number.
+    #[arg(short = 'm', long = "midi-port")]
+    midi_port_no: Option<usize>,
 }
 
 fn main() {
@@ -42,9 +47,9 @@ fn main() {
 
     // Select the loading strategy depending on the given arguments
     let result = match (&args.bundle_path, &args.plugin_id) {
-        (Some(path), None) => run_from_path(path),
-        (None, Some(id)) => run_from_id(id),
-        (Some(path), Some(id)) => run_specific(path, id),
+        (Some(path), None) => run_from_path(path, args.midi_port_no),
+        (None, Some(id)) => run_from_id(id, args.midi_port_no),
+        (Some(path), Some(id)) => run_specific(path, id, args.midi_port_no),
         (None, None) => Err(MainError::UnspecifiedOptions.into()),
     };
 
@@ -57,7 +62,7 @@ fn main() {
 /// Loads the plugin contained in a bundle, given through its path.
 ///
 /// Returns an error if there is more than one plugin in the bundle.
-fn run_from_path(path: &Path) -> Result<(), Box<dyn Error>> {
+fn run_from_path(path: &Path, midi_port_no: Option<usize>) -> Result<(), Box<dyn Error>> {
     let plugins = discovery::list_plugins_in_bundle(path)?;
 
     if plugins.is_empty() {
@@ -76,7 +81,7 @@ fn run_from_path(path: &Path) -> Result<(), Box<dyn Error>> {
 
     if plugins.len() == 1 {
         let plugin = plugins.into_iter().next().unwrap();
-        host::run(plugin)
+        host::run(plugin, midi_port_no)
     } else {
         Err(MainError::MultiplePluginsInPath(path.to_path_buf()).into())
     }
@@ -85,7 +90,7 @@ fn run_from_path(path: &Path) -> Result<(), Box<dyn Error>> {
 /// Scans the filesystem to find a plugin with a given ID.
 ///
 /// Returns an error if there is more than one plugin with this ID on the system.
-fn run_from_id(id: &str) -> Result<(), Box<dyn Error>> {
+fn run_from_id(id: &str, midi_port_no: Option<usize>) -> Result<(), Box<dyn Error>> {
     let plugins = discovery::scan_for_plugin_id(id);
 
     if plugins.is_empty() {
@@ -100,7 +105,7 @@ fn run_from_id(id: &str) -> Result<(), Box<dyn Error>> {
 
     if plugins.len() == 1 {
         let plugin = plugins.into_iter().next().unwrap();
-        host::run(plugin)
+        host::run(plugin, midi_port_no)
     } else {
         Err(MainError::MultiplePluginsWithId(id.to_string()).into())
     }
@@ -109,11 +114,11 @@ fn run_from_id(id: &str) -> Result<(), Box<dyn Error>> {
 /// Loads a specific plugin matching the given ID, from a specific bundle's path.
 ///
 /// Returns an error if that specific plugin isn't present in the bundle file.
-fn run_specific(path: &Path, id: &str) -> Result<(), Box<dyn Error>> {
+fn run_specific(path: &Path, id: &str, midi_port_no: Option<usize>) -> Result<(), Box<dyn Error>> {
     let bundle = discovery::load_plugin_id_from_path(path, id)?;
 
     if let Some(bundle) = bundle {
-        host::run(bundle)
+        host::run(bundle, midi_port_no)
     } else {
         Err(MainError::NoPluginInPathWithId(path.to_path_buf(), id.to_string()).into())
     }

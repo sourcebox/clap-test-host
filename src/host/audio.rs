@@ -21,6 +21,7 @@ use midi::*;
 /// Activates the given plugin instance, and outputs its processed audio to a new CPAL stream.
 pub fn activate_to_stream(
     instance: &mut PluginInstance<CpalHost>,
+    midi_port_no: Option<usize>,
 ) -> Result<Stream, Box<dyn Error>> {
     // Initialize CPAL
     let cpal_host = cpal::default_host();
@@ -30,7 +31,7 @@ pub fn activate_to_stream(
     let config = FullAudioConfig::find_best_from(&output_device, instance)?;
     println!("Using negociated audio output settings: {config}");
 
-    let midi = MidiReceiver::new(44_100, instance)?;
+    let midi = MidiReceiver::new(44_100, instance, midi_port_no)?;
 
     let plugin_audio_processor = instance
         .activate(|_, _| (), config.as_clack_plugin_config())?

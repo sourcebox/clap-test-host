@@ -2,6 +2,8 @@
 
 This project is based on the [clack-host-cpal example](https://github.com/prokopyl/clack/tree/main/host/examples/cpal).
 
+In addition to the original example, the used MIDI input port can be provided as argument.
+
 This small(-ish) host will load and instantiate a given plugin, show its UI in a window,
 feed it with MIDI input and output it to the system's default device using
 [CPAL](https://github.com/RustAudio/cpal).
@@ -60,6 +62,9 @@ Options:
           If multiple plugins matching the given ID were found on the filesystem,
           this should be used in conjunction with the `--bundle-path` (`-b`)
           parameter to specify which file to load the plugin from.
+  
+  -m, --midi-port <PORT_NO>
+          Opens the MIDI input with the given port number instead of the last one.
 
   -h, --help
           Print help (see a summary with '-h')

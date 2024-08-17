@@ -49,10 +49,11 @@ pub struct MidiReceiver {
 impl MidiReceiver {
     /// Connects to a MIDI device and starts receiving events.
     ///
-    /// This selects the last MIDI device that was plugged in, if any.
+    /// This selects the MIDI device indexed py `port_no` or the last that was plugged in, if any.
     pub fn new(
         sample_rate: u64,
         instance: &mut PluginInstance<CpalHost>,
+        port_no: Option<usize>,
     ) -> Result<Option<Self>, Box<dyn Error>> {
         let Some((main_plugin_note_port_index, prefers_midi)) = find_main_note_port_index(instance)
         else {
@@ -71,7 +72,11 @@ impl MidiReceiver {
         }
 
         // PANIC: we checked ports wasn't empty above
-        let selected_port = ports.last().unwrap();
+        let selected_port = if let Some(port_no) = port_no {
+            ports.get(port_no.clamp(0, ports.len() - 1)).unwrap()
+        } else {
+            ports.last().unwrap()
+        };
         let port_name = input.port_name(selected_port)?;
 
         if ports.len() > 1 {
@@ -83,7 +88,7 @@ impl MidiReceiver {
                 println!("\t > {port_name}")
             }
 
-            println!("\t * Using the latest MIDI device as input: {port_name}");
+            println!("\t * Using the MIDI device as input: {port_name}");
         } else {
             println!("MIDI device found! Using '{port_name}' as input.");
         }

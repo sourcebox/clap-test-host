@@ -158,7 +158,7 @@ impl<'a> MainThreadHandler<'a> for CpalHostMainThread<'a> {
 /// running until the window is closed.
 ///
 /// Otherwise, the plugin runs headless, and will keep running until the process is killed.
-pub fn run(plugin: FoundBundlePlugin) -> Result<(), Box<dyn Error>> {
+pub fn run(plugin: FoundBundlePlugin, midi_port_no: Option<usize>) -> Result<(), Box<dyn Error>> {
     let host_info = host_info();
     let plugin_id = CString::new(plugin.plugin.id.as_str())?;
     let (sender, receiver) = unbounded();
@@ -171,7 +171,7 @@ pub fn run(plugin: FoundBundlePlugin) -> Result<(), Box<dyn Error>> {
         &host_info,
     )?;
 
-    let _stream = activate_to_stream(&mut instance)?;
+    let _stream = activate_to_stream(&mut instance, midi_port_no)?;
 
     let gui = instance
         .access_handler(|h| h.gui)
