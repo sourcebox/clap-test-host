@@ -22,14 +22,14 @@ clack-extensions = { git = "https://github.com/prokopyl/clack/", rev = "406e759a
 clack-finder = { git = "https://github.com/prokopyl/clack/", rev = "406e759a40cb604cf4466269415016f0203a12a3" }
 cpal = "0.15.3"
 crossbeam-channel = "0.5.13"
-clap = { version = "4.5.16", features = ["derive"] }
-dirs = "5.0.1"
-midir = "0.10.0"
-rayon = "1.10.0"
-rtrb = "0.3.1"
-walkdir = "2.3.3"
-winit = { version = "0.30.5", default-features = false, features = [
+clap = { version = "4.6.1", features = ["derive"] }
+dirs = "6.0.0"
+midir = "0.11.0"
+rayon = "1.12.0"
+rtrb = "0.3.4"
+walkdir = "2.5.0"
+winit = { version = "0.30.13", default-features = false, features = [
     "rwh_06",
     "x11",
 ] }
-wmidi = "4.0.10"
+wmidi = "4.0.11"
