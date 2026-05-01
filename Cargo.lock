@@ -292,11 +292,9 @@ dependencies = [
  "clap",
  "cpal",
  "crossbeam-channel",
- "dirs",
  "midir",
  "rayon",
  "rtrb",
- "walkdir",
  "winit",
  "wmidi",
 ]
