@@ -6,10 +6,10 @@ license = "MIT OR Apache-2.0"
 publish = false
 
 [dependencies]
-clack-host = { git = "https://github.com/prokopyl/clack/", rev = "404adaf4ffc6cd579f11628d80baeaaace437461", features = [
+clack-host = { git = "https://github.com/prokopyl/clack/", rev = "406e759a40cb604cf4466269415016f0203a12a3", features = [
     "default",
 ] }
-clack-extensions = { git = "https://github.com/prokopyl/clack/", rev = "404adaf4ffc6cd579f11628d80baeaaace437461", features = [
+clack-extensions = { git = "https://github.com/prokopyl/clack/", rev = "406e759a40cb604cf4466269415016f0203a12a3", features = [
     "clack-host",
     "audio-ports",
     "note-ports",
@@ -19,6 +19,7 @@ clack-extensions = { git = "https://github.com/prokopyl/clack/", rev = "404adaf4
     "timer",
     "raw-window-handle_06",
 ] }
+clack-finder = { git = "https://github.com/prokopyl/clack/", rev = "406e759a40cb604cf4466269415016f0203a12a3" }
 cpal = "0.15.3"
 crossbeam-channel = "0.5.13"
 clap = { version = "4.5.16", features = ["derive"] }

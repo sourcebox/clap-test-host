@@ -8,7 +8,7 @@ This small(-ish) host will load and instantiate a given plugin, show its UI in a
 feed it with MIDI input and output it to the system's default device using
 [CPAL](https://github.com/RustAudio/cpal).
 
-## Limitations
+### Limitations
 
 Due to CPAL not being able to open a stream in duplex-mode (handling both input and
 output at the same time), this host only connects to one single audio output and doesn't
@@ -18,16 +18,19 @@ This means audio effects plugins that process an incoming signal, while technica
 in this host, will only receive silence as an input. In practice, synthesizers and other
 audio-generating plugins are better suited to test this example with.
 
+Moreover, CPAL is not designed to be a realtime audio library, therefore depending on the
+platform or OS, there might be significant delay in the audio/event processing.
+
 ## Features
 
 This is just an example host, don't expect too much in terms of features. :)
 
-* **Plugin Discovery**: Given a plugin ID, will scan the bundles in all the standard CLAP paths
-  on the filesystem to try and find a matching plugin. Alternatively, a specific CLAP bundle path
+* **Plugin Discovery**: Given a plugin ID, will scan the files in all the standard CLAP paths
+  on the filesystem to try and find a matching plugin. Alternatively, a specific CLAP file path
   can be provided.
 * **Cross-platform**: Can work on Windows, macOS and Linux, including opening GUIs, reading MIDI
   and outputting audio.
-* **GUI support**: Can open GUIs using each OS's default GUI API, either in floating or embedded
+* **GUI suppport**: Can open GUIs using each OS's default GUI API, either in floating or embedded
   window modes, depending on what the plugin supports.
 * **MIDI input support**: Can read MIDI events from an input device, and forward them to the plugin.
 * **Mono or Stereo output**, based on the plugin's preferences: will query the plugin's audio port
@@ -39,16 +42,16 @@ This is just an example host, don't expect too much in terms of features. :)
 ```text
 A simple CLI host to load and run a single CLAP plugin.
 
-At least one of the `--plugin-id` (`-p`) or the `--bundle-path` (`-b`) parameters
+At least one of the `--plugin-id` (`-p`) or the `--file-path` (`-f`) parameters
 *must* be used to specify which plugin to load.
 
 Usage: clack-host-cpal [OPTIONS]
 
 Options:
-  -b, --bundle-path <BUNDLE_PATH>
-          Loads the plugin found in the CLAP bundle at the given path.
+  -f, --file-path <FILE_PATH>
+          Loads the plugin found in the CLAP file at the given path.
 
-          If the bundle contains multiple plugins, this should be used in
+          If the file contains multiple plugins, this should be used in
           conjunction with the `--plugin-id` (`-p`) parameter to specify
           which one to load.
 
@@ -56,15 +59,12 @@ Options:
           Loads the CLAP plugin with the given unique ID.
 
           This will start to scan the filesystem in the standard CLAP paths,
-          and load all CLAP bundles found in those paths to search for the plugin
-          matchingthe given ID.
+          and load all CLAP files found in those paths to search for the plugin
+          matching the given ID.
 
           If multiple plugins matching the given ID were found on the filesystem,
-          this should be used in conjunction with the `--bundle-path` (`-b`)
+          this should be used in conjunction with the `--file-path` (`-f`)
           parameter to specify which file to load the plugin from.
-  
-  -m, --midi-port <PORT_NO>
-          Opens the MIDI input with the given port number instead of the last found.
 
   -h, --help
           Print help (see a summary with '-h')
@@ -79,8 +79,8 @@ following dependencies:
 * [`clap`](https://crates.io/crates/clap) (not this one, the other one), to handle CLI arguments.
 * [Crossbeam's MPSC channel](https://crates.io/crates/crossbeam-channel), for all the plugin's threads to communicate
   with the main thread.
-* [`dirs-rs`](https://crates.io/crates/dirs), to locate standard system directories, and deduce where CLAP bundles
-  are stored for plugin discovery.
+* [`clack-finder`](https://github.com/prokopyl/clack/tree/main/finder), to locate where CLAP files
+  are stored and perform plugin discovery.
 * [`midir`](https://crates.io/crates/midir) to connect to a MIDI input device, and
   [`wmidi`](https://crates.io/crates/wmidi) to decode them to CLAP note events.
 * [`rtrb`](https://crates.io/crates/rtrb) as a SPSC ringbuffer-based channel to send MIDI events from `midir`'s thread

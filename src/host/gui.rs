@@ -4,7 +4,6 @@ use clack_extensions::gui::{
 };
 use clack_host::prelude::*;
 use std::error::Error;
-use std::ffi::CStr;
 use winit::dpi::{LogicalSize, PhysicalSize, Size};
 use winit::event_loop::EventLoop;
 use winit::window::Window;
@@ -34,7 +33,7 @@ impl HostGuiImpl for CpalHostShared {
     }
 }
 
-impl<'a> CpalHostMainThread<'a> {}
+impl CpalHostMainThread<'_> {}
 
 /// Tracks a plugin's GUI state and configuration.
 pub struct Gui {
@@ -128,10 +127,7 @@ impl Gui {
         };
 
         self.plugin_gui.create(plugin, configuration)?;
-        self.plugin_gui.suggest_title(
-            plugin,
-            CStr::from_bytes_with_nul(b"Clack CPAL plugin!\0").unwrap(),
-        );
+        self.plugin_gui.suggest_title(plugin, c"Clack CPAL plugin!");
         self.plugin_gui.show(plugin)?;
 
         Ok(())

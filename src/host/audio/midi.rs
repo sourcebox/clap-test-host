@@ -49,7 +49,7 @@ pub struct MidiReceiver {
 impl MidiReceiver {
     /// Connects to a MIDI device and starts receiving events.
     ///
-    /// This selects the MIDI device indexed py `port_no` or the last that was plugged in, if any.
+    /// This selects the last MIDI device that was plugged in, if any.
     pub fn new(
         sample_rate: u64,
         instance: &mut PluginInstance<CpalHost>,
@@ -88,7 +88,7 @@ impl MidiReceiver {
                 println!("\t > {port_name}")
             }
 
-            println!("\t * Using the MIDI device as input: {port_name}");
+            println!("\t * Using the latest MIDI device as input: {port_name}");
         } else {
             println!("MIDI device found! Using '{port_name}' as input.");
         }
@@ -128,7 +128,7 @@ impl MidiReceiver {
     /// Event's timestamps are interpolated to sample time between 0 and the given sample count.
     ///
     /// This returns a Clack input event buffer handle, ready to feed to the plugin.
-    pub fn receive_all_events(&mut self, sample_count: u64) -> InputEvents {
+    pub fn receive_all_events(&mut self, sample_count: u64) -> InputEvents<'_> {
         self.clap_events_buffer.clear();
 
         if !self.abandoned && self.consumer.is_abandoned() {
