@@ -7,8 +7,7 @@ use clack_host::prelude::{
 };
 use cpal::traits::DeviceTrait;
 use cpal::{
-    BufferSize, Device, SampleFormat, SampleRate, StreamConfig, SupportedBufferSize,
-    SupportedStreamConfigRange,
+    BufferSize, Device, SampleFormat, StreamConfig, SupportedBufferSize, SupportedStreamConfigRange,
 };
 use std::cmp::Ordering;
 use std::error::Error;
@@ -60,7 +59,7 @@ impl FullAudioConfig {
         StreamConfig {
             channels: self.output_channel_count as u16,
             buffer_size: BufferSize::Fixed(self.max_likely_buffer_size),
-            sample_rate: SampleRate(self.sample_rate),
+            sample_rate: self.sample_rate,
         }
     }
 
@@ -208,7 +207,7 @@ fn is_device_config_supported(config: &SupportedStreamConfigRange) -> bool {
     }
 
     // Sample rates so bad, we don't want them
-    if config.max_sample_rate().0 < 44_100 {
+    if config.max_sample_rate() < 44_100 {
         return false;
     }
 
@@ -390,8 +389,8 @@ fn find_matching_output_config(
         min_buffer_size: min_buffer_size.max(1),
         max_likely_buffer_size: max_buffer_size,
         sample_rate: 44_100.clamp(
-            best_stream_config.min_sample_rate().0,
-            best_stream_config.max_sample_rate().0,
+            best_stream_config.min_sample_rate(),
+            best_stream_config.max_sample_rate(),
         ),
         plugin_output_port_config,
         plugin_input_port_config,
