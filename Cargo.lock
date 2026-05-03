@@ -227,7 +227,8 @@ checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
 [[package]]
 name = "clack-common"
 version = "0.1.0"
-source = "git+https://github.com/prokopyl/clack/?rev=406e759a40cb604cf4466269415016f0203a12a3#406e759a40cb604cf4466269415016f0203a12a3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6cc803ecdd9db71036304f1e308bc23274e58bb9251c447c20ed2d0a30c69d6c"
 dependencies = [
  "bitflags 2.11.1",
  "clap-sys",
@@ -236,7 +237,8 @@ dependencies = [
 [[package]]
 name = "clack-extensions"
 version = "0.1.0"
-source = "git+https://github.com/prokopyl/clack/?rev=406e759a40cb604cf4466269415016f0203a12a3#406e759a40cb604cf4466269415016f0203a12a3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0f7a09059637aa2043aeaab65e1d95bc91f340da1f05512c0c00e6e0283e5d9b"
 dependencies = [
  "bitflags 2.11.1",
  "clack-common",
@@ -258,7 +260,8 @@ dependencies = [
 [[package]]
 name = "clack-host"
 version = "0.1.0"
-source = "git+https://github.com/prokopyl/clack/?rev=406e759a40cb604cf4466269415016f0203a12a3#406e759a40cb604cf4466269415016f0203a12a3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2a3e2891319937507e5d1c85e853de54abbf1939bdee0aa81079fab2cbc5eb15"
 dependencies = [
  "clack-common",
  "clap-sys",
